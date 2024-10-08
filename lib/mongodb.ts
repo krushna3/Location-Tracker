@@ -39,17 +39,11 @@ if (!uri) {
 let client: MongoClient;
 let clientPromise: Promise<MongoClient>;
 
-// Extend the NodeJS global type to include _mongoClientPromise
 declare global {
-    namespace NodeJS {
-        interface Global {
-            _mongoClientPromise?: Promise<MongoClient>;
-        }
-    }
+    var _mongoClientPromise: Promise<MongoClient> | undefined;
 }
 
 if (process.env.NODE_ENV === 'development') {
-    // In development mode, use a global variable to ensure the MongoClient is reused
     if (!global._mongoClientPromise) {
         client = new MongoClient(uri);
         global._mongoClientPromise = client.connect();
